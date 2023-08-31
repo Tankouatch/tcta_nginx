@@ -1,4 +1,5 @@
 resource "aws_route53_record" "subdomain" {
+  depends_on = [aws_acm_certificate.example_certificate]
   zone_id = local.zone_id
   name    = "${var.subdomain}" 
   type    = "CNAME"
@@ -6,8 +7,8 @@ resource "aws_route53_record" "subdomain" {
   records = [aws_lb.load_balancer.dns_name]
 }
 
-
 resource "aws_lb" "load_balancer" {
+  depends_on = [aws_acm_certificate.example_certificate]
   name               = "nginx-alb"
   load_balancer_type = "application"
   security_groups    = [
@@ -26,8 +27,8 @@ resource "aws_lb" "load_balancer" {
   }
 }
 
-
 resource "aws_lb_listener" "http" {
+  depends_on = [aws_acm_certificate.example_certificate]
   load_balancer_arn = aws_lb.load_balancer.arn 
   port              = 80
   protocol          = "HTTP"
@@ -46,8 +47,8 @@ resource "aws_lb_listener" "http" {
   }
 }
 
-
 resource "aws_lb_listener" "https" {
+  depends_on = [aws_acm_certificate.example_certificate]
   load_balancer_arn = aws_lb.load_balancer.arn
   port              = 443
   protocol          = "HTTPS"
@@ -65,7 +66,6 @@ resource "aws_lb_listener" "https" {
   }
 }
 
-
 resource "aws_lb_target_group" "nginx" {
   name     = "nginx-target-group"
   port     = var.port
@@ -77,8 +77,8 @@ resource "aws_lb_target_group" "nginx" {
   }
 }
 
-
 resource "aws_instance" "nginx_instance" {
+  depends_on = [aws_key_pair.example]
   ami           = var.ami
   instance_type = var.instance_type
   subnet_id     = local.subnet_ids[1]
@@ -100,7 +100,6 @@ resource "aws_instance" "nginx_instance" {
     Name = "${local.resource_name_prefix}nginx-server"
   }
 }
-
 
 resource "aws_lb_target_group_attachment" "nginx_instance_attachment" {
   target_group_arn = aws_lb_target_group.nginx.arn
