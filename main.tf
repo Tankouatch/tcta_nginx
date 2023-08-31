@@ -107,7 +107,6 @@ resource "aws_lb_target_group_attachment" "nginx_instance_attachment" {
   port             = var.port
 }
 
-
 resource "aws_lb_listener_rule" "nginx" {
   listener_arn = aws_lb_listener.https.arn
   priority     = 100
@@ -127,7 +126,6 @@ resource "aws_lb_listener_rule" "nginx" {
     Name = "${local.resource_name_prefix}lb-listener-rule"
   }
 }
-
 
 locals {
   resource_name_prefix = "tcta_"
