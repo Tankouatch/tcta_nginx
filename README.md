@@ -7,6 +7,7 @@ The code as a whole has seven files:
 5. main.tf
 6. provider.tf
 7. variables.tf
+   
 This project use to create a t4g.nano EC2 instance behind a load balancer that serves the Nginx "Welcome to Nginx" default webpage and optionally uses an ACM certificate for HTTPS, you can follow these steps using Terraform. it sets up an Application Load Balancer (ALB) to route traffic to the instance.
 The "s3" state backend stores and manage the state files terraform uses to keep track of the infrastructure it manages, and also allow collaboration amoungs team members.
 The Dynamodb_table used for state locking and prevent conccurrent modifications. 
